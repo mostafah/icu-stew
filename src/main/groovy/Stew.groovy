@@ -34,7 +34,7 @@ public class Stew {
                 println t
             }else{
                 String l = esStrd2.iterator().collect { it }
-                //println "${t}: ${l}"
+                println "${t}: ${l}"
             }
         }
 
@@ -54,5 +54,4 @@ public class Stew {
 
     }
 
-    }
 }
