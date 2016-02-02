@@ -1,47 +1,36 @@
-import com.ibm.icu.text.UnicodeSet
-import com.ibm.icu.util.LocaleData
-import com.ibm.icu.util.ULocale
 import au.com.bytecode.opencsv.CSVWriter;
 
-/**
- * Created by shervinafshar on 11/21/15.
- */
 class Chart {
+	private List characters = []
 
-    public static void generateChart(ULocale u){
+	public addCharacter(Character ch, String lang, String langCon) {
+		addCharacter((String) ch, lang, langCon)
+	}
 
-        LocaleData ud = new LocaleData().getInstance(u)
-        UnicodeSet usEsStd = ud.getExemplarSet(0, ud.ES_STANDARD)
-        UnicodeSet usEsAux = ud.getExemplarSet(0, ud.ES_AUXILIARY)
-        UnicodeSet usEsPun = ud.getExemplarSet(0, ud.ES_PUNCTUATION)
+	public addCharacter(String str, String lang, String langCon) {
+		ChartCharacter ch = new ChartCharacter(str, lang, langCon)
+		ChartCharacter existing = this.characters.find { it.getCode() == ch.getCode() }
+		if (existing != null) {
+			existing.addLanguage(lang, langCon)
+			return
+		}
+		this.characters.add(ch)
+	}
 
-        FileWriter fw = new FileWriter("Exemplar-Chart-${u.displayLanguage}.csv")
+	private void exportCSV(String fname) {
+        FileWriter fw = new FileWriter(fname)
         CSVWriter writer = new CSVWriter(fw);
 
-        Collection<UnicodeSet> usList = []
-
-        usList.add(usEsStd)
-        usList.add(usEsAux)
-        usList.add(usEsPun)
-
-        String[] header = ["Unicode Name", "Code Point", "Character",
-                           "Is Letter?", "Is Digit?", "Is Diacritic?",
-                           "Is Bidi Control?"]
-
+        String[] header = ["Character", "UCS", "Name", "Ar", "Fa"]
         writer.writeNext(header)
 
-        usList.each {
-            it.iterator().each {
-
-                UnicodeCharacter uc = new UnicodeCharacter(it)
-                String[] ucValues = [uc.getName(), uc.codePointString, uc.getString(),
-                                     uc.isLetter(), uc.isDigit(), uc.isDiacritic(),
-                                     uc.isBidiControl()]
-                writer.writeNext(ucValues)
-            }
-        }
+		this.characters.each {
+			String[] values = [it.getString(), it.getCodeString(), it.getName(),
+							   it.getLanguage("ar"), it.getLanguage("fa")]
+			writer.writeNext(values)
+		}
 
         writer.close()
+	}
 
-    }
 }

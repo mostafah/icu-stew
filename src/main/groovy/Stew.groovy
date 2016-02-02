@@ -7,24 +7,9 @@ import com.ibm.icu.text.UnicodeSet
  * @author shervinafshar, @date 11/21/15 5:24 PM
  */
 
-
 public class Stew {
-
     public static void main(String[] args){
-
-        true
-
+		ALReqCharts c = new ALReqCharts()
+		c.generateCharts()
     }
-
-    public static void generateCharts(){
-
-        Chart c = new Chart()
-
-        c.generateChart(new ULocale('ar'))
-        c.generateChart(new ULocale('fa'))
-
-
-
-    }
-
 }
