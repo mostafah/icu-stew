@@ -29,7 +29,7 @@ class ChartCharacter {
 	}
 
     public String getCodeString (){
-        return "U+" + Integer.toHexString(this.code).toUpperCase()
+        return "U+" + String.format("%04x", this.code).toUpperCase()
     }
 
 	public String getString() {
