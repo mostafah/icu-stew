@@ -15,7 +15,8 @@ class ALReqCharts {
 
 	public void generateCharts(){
 		this.languages.each {
-			addCharacters(it)
+			addICUCharacters(it)
+			addCLDRCharacters(it)
 		}
 		exportCSV()
 	}
@@ -28,7 +29,7 @@ class ALReqCharts {
 		control.exportCSV("Control.csv")
 	}
 
-    private void addCharacters(String language){
+    private void addICUCharacters(String language){
 		ULocale u = new ULocale(language)
         LocaleData ud = new LocaleData().getInstance(u)
 
@@ -47,6 +48,13 @@ class ALReqCharts {
 		numSyms.getDigits().each { numbers.addCharacter(it, language,  "•") }
     }
 
+	private void addCLDRCharacters(String language) {
+		CLDRLocale l = new CLDRLocale(language)
+		l.getExemplarCharacters().each() { addUnknownCharacter(it, language, "•") }
+		l.getAuxiliaryCharacters().each() { addUnknownCharacter(it, language, "◦") }
+		l.getPunctuations().each() { punctuations.addCharacter(it, language, "•") }
+	}
+
 	private void addUnknownCharacter(String str, String lang, String langCon) {
 		ChartCharacter ch = new ChartCharacter(str, lang, langCon)
 		if (ch.isLetter()) {
@@ -54,6 +62,12 @@ class ALReqCharts {
 		}
 		if (ch.isDiacritic()) {
 			diacritics.addCharacter(str, lang, langCon)
+		}
+		if (ch.isDigit()) {
+			numbers.addCharacter(str, lang, langCon)
+		}
+		if (ch.isBidiControl()) {
+			control.addCharacter(str, lang, langCon)
 		}
 	}
 }

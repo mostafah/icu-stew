@@ -48,4 +48,12 @@ class ChartCharacter {
         return UCharacter.isLetter(this.code)
     }
 
+    public Boolean isBidiControl (){
+        return UCharacter.hasBinaryProperty(this.code, UProperty.BIDI_CONTROL)
+    }
+
+    public Boolean isDigit (){
+        return UCharacter.isLetterOrDigit(this.code) && !this.isLetter()
+    }
+
 }
