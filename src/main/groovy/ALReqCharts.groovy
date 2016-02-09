@@ -36,7 +36,7 @@ class ALReqCharts {
         UnicodeSet usEsStd = ud.getExemplarSet(0, ud.ES_STANDARD)
         UnicodeSet usEsAux = ud.getExemplarSet(0, ud.ES_AUXILIARY)
 		usEsStd.iterator().each { addUnknownCharacter(it, language, "•") }
-		usEsAux.iterator().each { addUnknownCharacter(it, language, "x") }
+		usEsAux.iterator().each { addUnknownCharacter(it, language, "◦") }
 
 		// add punctuations
         UnicodeSet usEsPun = ud.getExemplarSet(0, ud.ES_PUNCTUATION)
