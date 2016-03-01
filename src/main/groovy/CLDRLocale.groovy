@@ -1,9 +1,9 @@
 import groovy.json.JsonSlurper
 
 class CLDRLocale {
-	String[] exemplar = []
-	String[] auxiliary = []
-	String[] punctuation = []
+	private List exemplar = []
+	private List auxiliary = []
+	private List punctuation = []
 
 	public CLDRLocale(String locale) {
 		JsonSlurper slurper = new JsonSlurper()
@@ -11,9 +11,9 @@ class CLDRLocale {
 		fileNames.each {
 			File f = new File(it)
 			def result = slurper.parse(f)
-			this.exemplar.plus(expandCharactersList(result.characters.exemplarCharacters))
-			this.auxiliary.plus(expandCharactersList(result.characters.auxiliary))
-			this.punctuation.plus(expandCharactersList(result.characters.punctuation))
+			this.exemplar.addAll(expandCharactersList(result.characters.exemplarCharacters))
+			this.auxiliary.addAll(expandCharactersList(result.characters.auxiliary))
+			this.punctuation.addAll(expandCharactersList(result.characters.punctuation))
 		}
 	}
 
