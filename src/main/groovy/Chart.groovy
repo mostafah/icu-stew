@@ -9,8 +9,7 @@ class Chart {
 
 	public addCharacter(String str, String lang, String langCon) {
 		ChartCharacter ch = new ChartCharacter(str, lang, langCon)
-		if (ch.getCode() < 128) {
-			// ignore ASCII
+		if (ch.isASCII()) { // ignore ASCII
 			return
 		}
 		ChartCharacter existing = this.characters.find { it.getCode() == ch.getCode() }

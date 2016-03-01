@@ -40,6 +40,10 @@ class ChartCharacter {
 		return UCharacter.getName(this.code)
 	}
 
+	public Boolean isASCII (){
+		return this.code < 128;
+	}
+
     public Boolean isDiacritic (){
         return UCharacter.hasBinaryProperty(this.code, UProperty.DIACRITIC)
     }
