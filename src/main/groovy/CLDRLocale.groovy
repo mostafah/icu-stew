@@ -7,7 +7,7 @@ class CLDRLocale {
 
 	public CLDRLocale(String locale) {
 		JsonSlurper slurper = new JsonSlurper()
-		String[] fileNames = ["cldr/"+locale+".json"]
+		String[] fileNames = ["cldr/root.json", "cldr/"+locale+".json"]
 		fileNames.each {
 			File f = new File(it)
 			def result = slurper.parse(f)
