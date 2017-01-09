@@ -13,14 +13,19 @@ class Chart {
 			return
 		}
 		ChartCharacter existing = this.characters.find { it.getCode() == ch.getCode() }
-		if (existing != null) {
-			existing.addLanguage(lang, langCon)
+		if (existing == null) {
+			this.characters.add(ch)
 			return
 		}
-		this.characters.add(ch)
+		if (existing.getLanguage(lang) == "") {
+			existing.addLanguage(lang, langCon)
+		}
 	}
 
 	private void exportCSV(String fname) {
+		characters = characters.sort {
+			it.getCode()
+		}
         FileWriter fw = new FileWriter(fname)
         CSVWriter writer = new CSVWriter(fw);
 
@@ -35,5 +40,4 @@ class Chart {
 
         writer.close()
 	}
-
 }

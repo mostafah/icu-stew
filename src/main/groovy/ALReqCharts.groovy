@@ -2,6 +2,7 @@ import com.ibm.icu.text.UnicodeSet
 import com.ibm.icu.text.DecimalFormatSymbols
 import com.ibm.icu.util.LocaleData
 import com.ibm.icu.util.ULocale
+import groovy.json.JsonSlurper
 import au.com.bytecode.opencsv.CSVWriter;
 
 class ALReqCharts {
@@ -17,6 +18,9 @@ class ALReqCharts {
 		this.languages.each {
 			addICUCharacters(it)
 			addCLDRCharacters(it)
+			if (it == 'fa') {
+				addISIRI6219Characters(it)
+			}
 		}
 		exportCSV()
 	}
@@ -53,6 +57,61 @@ class ALReqCharts {
 		l.getExemplarCharacters().each() { addUnknownCharacter(it, language, "•") }
 		l.getAuxiliaryCharacters().each() { addUnknownCharacter(it, language, "◦") }
 		l.getPunctuations().each() { punctuations.addCharacter(it, language, "•") }
+	}
+
+	private void addISIRI6219Characters(String language) {
+		JsonSlurper slurper = new JsonSlurper()
+		File f = new File("isiri-6219/isiri-6219.json")
+		def result = slurper.parse(f)
+		result.each {
+			String codestr = it.code
+			if (codestr.startsWith("U+")) {
+				codestr = codestr.substring(2)
+			}
+			Integer code = Integer.parseInt(codestr, 16)
+			String str = codeToStr(code)
+			String con = "•";
+			if (it.class == "optional") {
+				con = "◦"
+			}
+			if (it.class != "forbidden") {
+				switch (it.category) {
+				case "control":
+				control.addCharacter(str, language, con)
+				break
+				case "common_punctuation":
+				punctuations.addCharacter(str, language, con)
+				break
+				case "persian_punctuation":
+				punctuations.addCharacter(str, language, con)
+				break
+				case "math":
+				ChartCharacter ch = new ChartCharacter(str, language, con)
+				if (ch.isDigit()) {
+					numbers.addCharacter(str, language, con)
+				} else {
+					punctuations.addCharacter(str, language, con)
+				}
+				break
+				case "alphabet":
+				alphabet.addCharacter(str, language, con)
+				break
+				case "subsidiary":
+				alphabet.addCharacter(str, language, con)
+				break
+				case "diacritic":
+				diacritics.addCharacter(str, language, con)
+				break
+				default:
+				println("unknown category")
+				}
+			}
+		}
+	}
+
+	private static String codeToStr(Integer code) {
+		int[] a = [code.intValue()]
+		return new String(a, 0, 1)
 	}
 
 	private void addUnknownCharacter(String str, String lang, String langCon) {
