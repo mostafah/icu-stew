@@ -17,7 +17,7 @@ class Chart {
 			this.characters.add(ch)
 			return
 		}
-		if (existing.getLanguage(lang) == "") {
+		if (existing.getLanguage(lang) == "✕") {
 			existing.addLanguage(lang, langCon)
 		}
 	}

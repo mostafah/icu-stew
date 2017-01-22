@@ -21,7 +21,7 @@ class ChartCharacter {
 		if (this.languages.containsKey(lang)) {
 			return this.languages[lang]
 		}
-		return ""
+		return "✕"
 	}
 
 	public Integer getCode() {

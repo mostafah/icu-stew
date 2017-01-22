@@ -40,23 +40,37 @@ class ALReqCharts {
 		// add alphabets and diacritics
         UnicodeSet usEsStd = ud.getExemplarSet(0, ud.ES_STANDARD)
         UnicodeSet usEsAux = ud.getExemplarSet(0, ud.ES_AUXILIARY)
-		usEsStd.iterator().each { addUnknownCharacter(it, language, "•") }
-		usEsAux.iterator().each { addUnknownCharacter(it, language, "◦") }
+		usEsStd.iterator().each { addUnknownCharacter(it, language, "●") }
+		usEsAux.iterator().each { addUnknownCharacter(it, language, "○") }
 
 		// add punctuations
         UnicodeSet usEsPun = ud.getExemplarSet(0, ud.ES_PUNCTUATION)
-		usEsPun.iterator().each { punctuations.addCharacter(it, language, "•") }
+		usEsPun.iterator().each { punctuations.addCharacter(it, language, "●") }
 
 		// add numbers
 		DecimalFormatSymbols numSyms = new DecimalFormatSymbols(u)
-		numSyms.getDigits().each { numbers.addCharacter(it, language,  "•") }
+		numSyms.getDigits().each { numbers.addCharacter(it, language,  "●") }
+
+		addNumberSymbols(language)
     }
+
+	private void addNumberSymbols(String language) {
+		ULocale u = new ULocale(language)
+		DecimalFormatSymbols numSyms = new DecimalFormatSymbols(u)
+		punctuations.addCharacter(numSyms.getDecimalSeparator(), language,  "●")
+		punctuations.addCharacter(numSyms.getGroupingSeparator(), language,  "●")
+		punctuations.addCharacter(numSyms.getPercent(), language,  "●")
+		punctuations.addCharacter(numSyms.getMinusSign(), language,  "●")
+		punctuations.addCharacter(numSyms.getPlusSign(), language,  "●")
+		punctuations.addCharacter(numSyms.getExponentMultiplicationSign(), language,  "●")
+		punctuations.addCharacter(numSyms.getInfinity(), language,  "●")
+	}
 
 	private void addCLDRCharacters(String language) {
 		CLDRLocale l = new CLDRLocale(language)
-		l.getExemplarCharacters().each() { addUnknownCharacter(it, language, "•") }
-		l.getAuxiliaryCharacters().each() { addUnknownCharacter(it, language, "◦") }
-		l.getPunctuations().each() { punctuations.addCharacter(it, language, "•") }
+		l.getExemplarCharacters().each() { addUnknownCharacter(it, language, "●") }
+		l.getAuxiliaryCharacters().each() { addUnknownCharacter(it, language, "○") }
+		l.getPunctuations().each() { punctuations.addCharacter(it, language, "●") }
 	}
 
 	private void addISIRI6219Characters(String language) {
@@ -70,9 +84,9 @@ class ALReqCharts {
 			}
 			Integer code = Integer.parseInt(codestr, 16)
 			String str = codeToStr(code)
-			String con = "•";
+			String con = "●";
 			if (it.class == "optional") {
-				con = "◦"
+				con = "○"
 			}
 			if (it.class != "forbidden") {
 				switch (it.category) {
