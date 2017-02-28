@@ -37,6 +37,9 @@ class ChartCharacter {
 	}
 
 	public String getName() {
+		if (!(UCharacter.getName(this.code)) && (UCharacter.isISOControl(this.code))) {
+			return "<control>"
+		}
 		return UCharacter.getName(this.code)
 	}
 
