@@ -3,12 +3,12 @@ import au.com.bytecode.opencsv.CSVWriter;
 class Chart {
 	private List characters = []
 
-	public addCharacter(Character ch, String lang, String langConn) {
-		addCharacter((String) ch, lang, langConn)
+	public addCharacter(Character ch, String category, String lang, String langConn) {
+		addCharacter((String) ch, category, lang, langConn)
 	}
 
-	public addCharacter(String str, String lang, String langConn) {
-		ChartCharacter ch = new ChartCharacter(str, lang, langConn)
+	public addCharacter(String str, String category, String lang, String langConn) {
+		ChartCharacter ch = new ChartCharacter(str, category, lang, langConn)
 		// if (ch.isASCII()) { // ignore ASCII
 		// 	return
 		// }
@@ -16,6 +16,9 @@ class Chart {
 		if (existing == null) {
 			this.characters.add(ch)
 			return
+		}
+		if (existing.getCategory() != category) {
+			println "error!"
 		}
 		if (existing.getLanguage(lang) == "✕") {
 			existing.addLanguage(lang, langConn)
@@ -29,12 +32,13 @@ class Chart {
         FileWriter fw = new FileWriter(fname)
         CSVWriter writer = new CSVWriter(fw);
 
-        String[] header = ["Character", "UCS", "Name", "Ar", "Fa"]
+        String[] header = ["Character", "UCS", "Name", "Ar", "Fa", "Category"]
         writer.writeNext(header)
 
 		this.characters.each {
 			String[] values = [it.getString(), it.getCodeString(), it.getName(),
-							   it.getLanguage("ar"), it.getLanguage("fa")]
+							   it.getLanguage("ar"), it.getLanguage("fa"),
+							   it.getCategory()]
 			writer.writeNext(values)
 		}
 

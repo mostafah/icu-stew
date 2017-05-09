@@ -6,11 +6,7 @@ import groovy.json.JsonSlurper
 import au.com.bytecode.opencsv.CSVWriter;
 
 class ALReqCharts {
-	Chart alphabet = new Chart()
-	Chart diacritics = new Chart()
-	Chart numbers = new Chart()
-	Chart punctuations = new Chart()
-	Chart control = new Chart()
+	Chart theChart = new Chart()
 
 	private languages = ['ar', 'fa']
 
@@ -26,11 +22,7 @@ class ALReqCharts {
 	}
 
 	private void exportCSV() {
-		alphabet.exportCSV("Alphabet.csv")
-		diacritics.exportCSV("Diacritics.csv")
-		numbers.exportCSV("Numbers.csv")
-		punctuations.exportCSV("Punctuations.csv")
-		control.exportCSV("Control.csv")
+		theChart.exportCSV("characters.csv")
 	}
 
     private void addICUCharacters(String language){
@@ -45,11 +37,11 @@ class ALReqCharts {
 
 		// add punctuations
         UnicodeSet usEsPun = ud.getExemplarSet(0, ud.ES_PUNCTUATION)
-		usEsPun.iterator().each { punctuations.addCharacter(it, language, "✓") }
+		usEsPun.iterator().each { theChart.addCharacter(it, "punctuations", language, "✓") }
 
 		// add numbers
 		DecimalFormatSymbols numSyms = new DecimalFormatSymbols(u)
-		numSyms.getDigits().each { numbers.addCharacter(it, language,  "✓") }
+		numSyms.getDigits().each { theChart.addCharacter(it, "numbers", language,  "✓") }
 
 		addNumberSymbols(language)
     }
@@ -57,20 +49,20 @@ class ALReqCharts {
 	private void addNumberSymbols(String language) {
 		ULocale u = new ULocale(language)
 		DecimalFormatSymbols numSyms = new DecimalFormatSymbols(u)
-		punctuations.addCharacter(numSyms.getDecimalSeparator(), language,  "✓")
-		punctuations.addCharacter(numSyms.getGroupingSeparator(), language,  "✓")
-		punctuations.addCharacter(numSyms.getPercent(), language,  "✓")
-		punctuations.addCharacter(numSyms.getMinusSign(), language,  "✓")
-		punctuations.addCharacter(numSyms.getPlusSign(), language,  "✓")
-		punctuations.addCharacter(numSyms.getExponentMultiplicationSign(), language,  "✓")
-		punctuations.addCharacter(numSyms.getInfinity(), language,  "✓")
+		theChart.addCharacter(numSyms.getDecimalSeparator(), "punctuations", language,  "✓")
+		theChart.addCharacter(numSyms.getGroupingSeparator(), "punctuations", language,  "✓")
+		theChart.addCharacter(numSyms.getPercent(), "punctuations", language,  "✓")
+		theChart.addCharacter(numSyms.getMinusSign(), "punctuations", language,  "✓")
+		theChart.addCharacter(numSyms.getPlusSign(), "punctuations", language,  "✓")
+		theChart.addCharacter(numSyms.getExponentMultiplicationSign(), "punctuations", language,  "✓")
+		theChart.addCharacter(numSyms.getInfinity(), "punctuations", language,  "✓")
 	}
 
 	private void addCLDRCharacters(String language) {
 		CLDRLocale l = new CLDRLocale(language)
 		l.getExemplarCharacters().each() { addUnknownCharacter(it, language, "✓") }
 		l.getAuxiliaryCharacters().each() { addUnknownCharacter(it, language, "✲") }
-		l.getPunctuations().each() { punctuations.addCharacter(it, language, "✓") }
+		l.getPunctuations().each() { theChart.addCharacter(it, "punctuations", language, "✓") }
 	}
 
 	private void addISIRI6219Characters(String language) {
@@ -91,30 +83,30 @@ class ALReqCharts {
 			if (it.class != "forbidden") {
 				switch (it.category) {
 				case "control":
-				control.addCharacter(str, language, conn)
+				theChart.addCharacter(str, "control", language, conn)
 				break
 				case "common_punctuation":
-				punctuations.addCharacter(str, language, conn)
+				theChart.addCharacter(str, "punctuations", language, conn)
 				break
 				case "persian_punctuation":
-				punctuations.addCharacter(str, language, conn)
+				theChart.addCharacter(str, "punctuations", language, conn)
 				break
 				case "math":
-				ChartCharacter ch = new ChartCharacter(str, language, conn)
+				ChartCharacter ch = new ChartCharacter(str, "", language, conn)
 				if (ch.isDigit()) {
-					numbers.addCharacter(str, language, conn)
+					theChart.addCharacter(str, "numbers", language, conn)
 				} else {
-					punctuations.addCharacter(str, language, conn)
+					theChart.addCharacter(str, "punctuations", language, conn)
 				}
 				break
 				case "alphabet":
-				alphabet.addCharacter(str, language, conn)
+				theChart.addCharacter(str, "alphabet", language, conn)
 				break
 				case "subsidiary":
-				alphabet.addCharacter(str, language, conn)
+				theChart.addCharacter(str, "alphabet", language, conn)
 				break
 				case "diacritic":
-				diacritics.addCharacter(str, language, conn)
+				theChart.addCharacter(str, "diacritics", language, conn)
 				break
 				default:
 				println("unknown category")
@@ -129,18 +121,18 @@ class ALReqCharts {
 	}
 
 	private void addUnknownCharacter(String str, String lang, String langConn) {
-		ChartCharacter ch = new ChartCharacter(str, lang, langConn)
+		ChartCharacter ch = new ChartCharacter(str, "", lang, langConn)
 		if (ch.isLetter()) {
-			alphabet.addCharacter(str, lang, langConn)
+			theChart.addCharacter(str, "alphabet", lang, langConn)
 		}
 		if (ch.isDiacritic()) {
-			diacritics.addCharacter(str, lang, langConn)
+			theChart.addCharacter(str, "diacritics", lang, langConn)
 		}
 		if (ch.isDigit()) {
-			numbers.addCharacter(str, lang, langConn)
+			theChart.addCharacter(str, "numbers", lang, langConn)
 		}
 		if (ch.isBidiControl()) {
-			control.addCharacter(str, lang, langConn)
+			theChart.addCharacter(str, "control", lang, langConn)
 		}
 	}
 }

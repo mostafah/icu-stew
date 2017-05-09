@@ -4,11 +4,12 @@ import com.ibm.icu.lang.UProperty
 class ChartCharacter {
 	private String str
 	private Integer code
-
 	private languages = [:]
+	private category
 
-	public ChartCharacter(String str, String lang, String langConn) {
+	public ChartCharacter(String str, String category, String lang, String langConn) {
 		this.str = str
+		this.category = category
 		this.code = UCharacter.codePointAt(str, 0)
 		this.languages[lang] = langConn
 	}
@@ -22,6 +23,10 @@ class ChartCharacter {
 			return this.languages[lang]
 		}
 		return "✕"
+	}
+
+	public String getCategory() {
+		return this.category
 	}
 
 	public Integer getCode() {
@@ -62,5 +67,4 @@ class ChartCharacter {
     public Boolean isDigit (){
         return UCharacter.isLetterOrDigit(this.code) && !this.isLetter()
     }
-
 }
