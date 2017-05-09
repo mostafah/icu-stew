@@ -3,12 +3,12 @@ import au.com.bytecode.opencsv.CSVWriter;
 class Chart {
 	private List characters = []
 
-	public addCharacter(Character ch, String lang, String langCon) {
-		addCharacter((String) ch, lang, langCon)
+	public addCharacter(Character ch, String lang, String langConn) {
+		addCharacter((String) ch, lang, langConn)
 	}
 
-	public addCharacter(String str, String lang, String langCon) {
-		ChartCharacter ch = new ChartCharacter(str, lang, langCon)
+	public addCharacter(String str, String lang, String langConn) {
+		ChartCharacter ch = new ChartCharacter(str, lang, langConn)
 		// if (ch.isASCII()) { // ignore ASCII
 		// 	return
 		// }
@@ -18,7 +18,7 @@ class Chart {
 			return
 		}
 		if (existing.getLanguage(lang) == "✕") {
-			existing.addLanguage(lang, langCon)
+			existing.addLanguage(lang, langConn)
 		}
 	}
 

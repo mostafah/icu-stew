@@ -84,37 +84,37 @@ class ALReqCharts {
 			}
 			Integer code = Integer.parseInt(codestr, 16)
 			String str = codeToStr(code)
-			String con = "✓";
+			String conn = "✓";
 			if (it.class == "optional") {
-				con = "✲"
+				conn = "✲"
 			}
 			if (it.class != "forbidden") {
 				switch (it.category) {
 				case "control":
-				control.addCharacter(str, language, con)
+				control.addCharacter(str, language, conn)
 				break
 				case "common_punctuation":
-				punctuations.addCharacter(str, language, con)
+				punctuations.addCharacter(str, language, conn)
 				break
 				case "persian_punctuation":
-				punctuations.addCharacter(str, language, con)
+				punctuations.addCharacter(str, language, conn)
 				break
 				case "math":
-				ChartCharacter ch = new ChartCharacter(str, language, con)
+				ChartCharacter ch = new ChartCharacter(str, language, conn)
 				if (ch.isDigit()) {
-					numbers.addCharacter(str, language, con)
+					numbers.addCharacter(str, language, conn)
 				} else {
-					punctuations.addCharacter(str, language, con)
+					punctuations.addCharacter(str, language, conn)
 				}
 				break
 				case "alphabet":
-				alphabet.addCharacter(str, language, con)
+				alphabet.addCharacter(str, language, conn)
 				break
 				case "subsidiary":
-				alphabet.addCharacter(str, language, con)
+				alphabet.addCharacter(str, language, conn)
 				break
 				case "diacritic":
-				diacritics.addCharacter(str, language, con)
+				diacritics.addCharacter(str, language, conn)
 				break
 				default:
 				println("unknown category")
@@ -128,19 +128,19 @@ class ALReqCharts {
 		return new String(a, 0, 1)
 	}
 
-	private void addUnknownCharacter(String str, String lang, String langCon) {
-		ChartCharacter ch = new ChartCharacter(str, lang, langCon)
+	private void addUnknownCharacter(String str, String lang, String langConn) {
+		ChartCharacter ch = new ChartCharacter(str, lang, langConn)
 		if (ch.isLetter()) {
-			alphabet.addCharacter(str, lang, langCon)
+			alphabet.addCharacter(str, lang, langConn)
 		}
 		if (ch.isDiacritic()) {
-			diacritics.addCharacter(str, lang, langCon)
+			diacritics.addCharacter(str, lang, langConn)
 		}
 		if (ch.isDigit()) {
-			numbers.addCharacter(str, lang, langCon)
+			numbers.addCharacter(str, lang, langConn)
 		}
 		if (ch.isBidiControl()) {
-			control.addCharacter(str, lang, langCon)
+			control.addCharacter(str, lang, langConn)
 		}
 	}
 }

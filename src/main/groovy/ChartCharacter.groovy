@@ -7,14 +7,14 @@ class ChartCharacter {
 
 	private languages = [:]
 
-	public ChartCharacter(String str, String lang, String langCon) {
+	public ChartCharacter(String str, String lang, String langConn) {
 		this.str = str
 		this.code = UCharacter.codePointAt(str, 0)
-		this.languages[lang] = langCon
+		this.languages[lang] = langConn
 	}
 
-	public addLanguage(String lang, String langCon) {
-		this.languages[lang] = langCon
+	public addLanguage(String lang, String langConn) {
+		this.languages[lang] = langConn
 	}
 
 	public String getLanguage(String lang) {
